@@ -1,0 +1,459 @@
+import { UserModel, stripPassword, toPublicUser } from "../models/user";
+import {
+  CreateUserRequest,
+  UserWithoutPassword,
+  PublicUser,
+  UpdateUserProfileRequest,
+  UpdateUserWithPasswordRequest,
+} from "../types/user";
+import { AuthUtils } from "../utils/auth";
+
+const AVATAR_UPLOAD_PREFIX = "/uploads/avatars/";
+const AVATAR_FILENAME_REGEX = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+export class UserService {
+  private static normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
+  }
+
+  private static validateEmailFormat(email: string): void {
+    if (email.length === 0) {
+      throw new Error("Email cannot be empty");
+    }
+
+    if (email.length > 100) {
+      throw new Error("Email must be 100 characters or fewer");
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email format");
+    }
+  }
+
+  private static validatePasswordCharacters(password: string): void {
+    // Allow only printable ASCII characters (space to tilde: 0x20-0x7E)
+    const asciiPrintableRegex = /^[\x20-\x7E]+$/;
+    if (!asciiPrintableRegex.test(password)) {
+      throw new Error(
+        "Password must contain only ASCII characters (letters, numbers, and symbols)",
+      );
+    }
+  }
+
+  static async validateEmailChange(
+    currentUser: UserWithoutPassword,
+    candidateEmail: string,
+  ): Promise<string> {
+    const normalized = this.normalizeEmail(candidateEmail);
+    this.validateEmailFormat(normalized);
+
+    if (normalized === currentUser.email.toLowerCase()) {
+      return normalized;
+    }
+
+    const userWithSameEmail = await UserModel.findByEmail(normalized);
+    if (userWithSameEmail && userWithSameEmail.id !== currentUser.id) {
+      throw new Error("Email is already in use");
+    }
+
+    return normalized;
+  }
+
+  static async applyEmailChange(
+    userId: number,
+    newEmail: string,
+  ): Promise<UserWithoutPassword> {
+    const existingUser = await UserModel.findById(userId);
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const currentUser = stripPassword(existingUser);
+    const normalizedEmail = await this.validateEmailChange(
+      currentUser,
+      newEmail,
+    );
+
+    if (normalizedEmail !== currentUser.email.toLowerCase()) {
+      await UserModel.updateProfile(userId, { email: normalizedEmail });
+    }
+
+    const updatedUser = await this.getUserById(userId);
+    if (!updatedUser) {
+      throw new Error("User not found after email update");
+    }
+
+    return updatedUser;
+  }
+
+  static async setTwoFactorEnabledStatus(
+    userId: number,
+    enabled: boolean,
+  ): Promise<UserWithoutPassword> {
+    await UserModel.setTwoFactorEnabled(userId, enabled);
+    const updatedUser = await this.getUserById(userId);
+    if (!updatedUser) {
+      throw new Error("User not found after updating two-factor status");
+    }
+    return updatedUser;
+  }
+
+  static toPublicUser(user: UserWithoutPassword): PublicUser {
+    return toPublicUser(user);
+  }
+
+  static async createUser(
+    userData: CreateUserRequest,
+  ): Promise<UserWithoutPassword> {
+    try {
+      const normalizedUsername = userData.username.trim();
+      const normalizedEmail = this.normalizeEmail(userData.email);
+
+      if (normalizedUsername.length === 0) {
+        throw new Error("Username cannot be empty");
+      }
+
+      this.validateEmailFormat(normalizedEmail);
+
+      this.validatePasswordCharacters(userData.password);
+
+      if (userData.password.length > 72) {
+        throw new Error("Password must be 72 characters or fewer");
+      }
+
+      if (await UserModel.findByEmail(normalizedEmail)) {
+        throw new Error("User with this email already exists");
+      }
+
+      if (await UserModel.findByUsername(normalizedUsername)) {
+        throw new Error("User with this username already exists");
+      }
+
+      const passwordHash = await AuthUtils.hashPassword(userData.password);
+      const newUser = await UserModel.create({
+        username: normalizedUsername,
+        email: normalizedEmail,
+        passwordHash,
+      });
+
+      return stripPassword(newUser);
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message.includes("UNIQUE constraint failed") // Fallback for race conditions
+      ) {
+        if (error.message.includes("users.email")) {
+          throw new Error("User with this email already exists");
+        } else if (error.message.includes("users.username")) {
+          throw new Error("User with this username already exists");
+        } else {
+          throw new Error("User with this email or username already exists");
+        }
+      }
+      throw error;
+    }
+  }
+
+  static async authenticateUser(
+    email: string,
+    password: string,
+  ): Promise<UserWithoutPassword | null> {
+    const normalizedEmail = this.normalizeEmail(email);
+    this.validateEmailFormat(normalizedEmail);
+
+    if (password.length > 72) {
+      return null; // Invalid password (too long)
+    }
+
+    const user = await UserModel.findByEmail(normalizedEmail);
+
+    if (!user) {
+      return null; // User not found
+    }
+
+    const isValidPassword = await AuthUtils.verifyPassword(
+      password,
+      user.password_hash,
+    );
+    if (!isValidPassword) {
+      return null; // Invalid password
+    }
+
+    return stripPassword(user);
+  }
+
+  static async getUserById(id: number): Promise<UserWithoutPassword | null> {
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return null;
+    }
+
+    return stripPassword(user);
+  }
+
+  static async updateUserOnlineStatus(
+    id: number,
+    isOnline: boolean,
+  ): Promise<void> {
+    await UserModel.setOnlineStatus(id, isOnline);
+  }
+
+  static async markUserLoggedIn(
+    id: number,
+  ): Promise<UserWithoutPassword | null> {
+    await UserModel.updateLoginMetadata(id);
+    const refreshedUser = await UserModel.findById(id);
+    return refreshedUser ? stripPassword(refreshedUser) : null;
+  }
+
+  static async verifyUserPassword(
+    id: number,
+    password: string,
+  ): Promise<boolean> {
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return false;
+    }
+
+    return AuthUtils.verifyPassword(password, user.password_hash);
+  }
+
+  static async updateUserProfile(
+    id: number,
+    updates: UpdateUserProfileRequest,
+  ): Promise<UserWithoutPassword> {
+    const existingUser = await UserModel.findById(id);
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    const existingUserWithoutPassword = stripPassword(existingUser);
+
+    const profileUpdates: Partial<
+      Record<
+        "username" | "email" | "profile_image_url" | "language",
+        string | null
+      >
+    > = {};
+
+    if (typeof updates.username === "string") {
+      const trimmedUsername = updates.username.trim();
+
+      if (trimmedUsername.length === 0) {
+        throw new Error("Username cannot be empty");
+      }
+
+      if (trimmedUsername.length < 3 || trimmedUsername.length > 20) {
+        throw new Error("Username must be between 3 and 20 characters");
+      }
+
+      if (trimmedUsername !== existingUser.username) {
+        const userWithSameUsername =
+          await UserModel.findByUsername(trimmedUsername);
+        if (userWithSameUsername && userWithSameUsername.id !== id) {
+          throw new Error("Username is already taken");
+        }
+      }
+
+      profileUpdates.username = trimmedUsername;
+    }
+
+    if (typeof updates.email === "string") {
+      const normalizedEmail = await this.validateEmailChange(
+        existingUserWithoutPassword,
+        updates.email,
+      );
+      profileUpdates.email = normalizedEmail;
+    }
+
+    if (updates.profile_image_url !== undefined) {
+      profileUpdates.profile_image_url = this.validateProfileImagePath(
+        updates.profile_image_url,
+      );
+    }
+
+    if (typeof updates.language === "string") {
+      const trimmedLanguage = updates.language.trim();
+      const validLanguages = ["en", "cs", "jp"];
+
+      if (!validLanguages.includes(trimmedLanguage)) {
+        throw new Error("Invalid language. Must be one of: en, cs, jp");
+      }
+
+      profileUpdates.language = trimmedLanguage;
+    }
+
+    if (Object.keys(profileUpdates).length === 0) {
+      return existingUserWithoutPassword;
+    }
+
+    try {
+      await UserModel.updateProfile(id, profileUpdates);
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message.includes("UNIQUE constraint failed")
+      ) {
+        if (error.message.includes("users.username")) {
+          throw new Error("Username is already taken");
+        }
+        if (error.message.includes("users.email")) {
+          throw new Error("Email is already in use");
+        }
+      }
+      throw error;
+    }
+
+    const updatedUser = await this.getUserById(id);
+    if (!updatedUser) {
+      throw new Error("User not found after update");
+    }
+
+    return updatedUser;
+  }
+
+  static async updateUserPassword(
+    id: number,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isCurrentPasswordValid = await AuthUtils.verifyPassword(
+      currentPassword,
+      user.password_hash,
+    );
+
+    if (!isCurrentPasswordValid) {
+      throw new Error("Current password is incorrect");
+    }
+
+    if (newPassword.length < 6) {
+      throw new Error("New password must be at least 6 characters long");
+    }
+
+    this.validatePasswordCharacters(newPassword);
+
+    if (newPassword.length > 72) {
+      throw new Error("New password must be 72 characters or fewer");
+    }
+
+    const newPasswordHash = await AuthUtils.hashPassword(newPassword);
+    await UserModel.updatePasswordHash(id, newPasswordHash);
+  }
+
+  static async updateUserSettings(
+    id: number,
+    updates: UpdateUserWithPasswordRequest,
+  ): Promise<{ user: UserWithoutPassword; token?: string }> {
+    const profileUpdates: UpdateUserProfileRequest = {};
+    let profileUpdated = false;
+
+    if (Object.prototype.hasOwnProperty.call(updates, "username")) {
+      profileUpdates.username = updates.username;
+      profileUpdated = true;
+    }
+    if (Object.prototype.hasOwnProperty.call(updates, "email")) {
+      profileUpdates.email = updates.email;
+      profileUpdated = true;
+    }
+    if (Object.prototype.hasOwnProperty.call(updates, "profile_image_url")) {
+      profileUpdates.profile_image_url = updates.profile_image_url ?? null;
+      profileUpdated = true;
+    }
+    if (Object.prototype.hasOwnProperty.call(updates, "language")) {
+      profileUpdates.language = updates.language;
+      profileUpdated = true;
+    }
+
+    let updatedUser: UserWithoutPassword | null = null;
+    if (profileUpdated) {
+      updatedUser = await this.updateUserProfile(id, profileUpdates);
+    }
+
+    const passwordProvided =
+      updates.currentPassword !== undefined ||
+      updates.newPassword !== undefined;
+
+    if (passwordProvided) {
+      if (!updates.currentPassword || !updates.newPassword) {
+        throw new Error(
+          "Current password and new password are required to change password",
+        );
+      }
+
+      await this.updateUserPassword(
+        id,
+        updates.currentPassword,
+        updates.newPassword,
+      );
+
+      // fetch updated user to ensure token_version is fresh
+      updatedUser = await this.getUserById(id);
+    }
+
+    if (!updatedUser) {
+      updatedUser = await this.getUserById(id);
+    }
+
+    if (!updatedUser) {
+      throw new Error("User not found after update");
+    }
+
+    const shouldIssueNewToken = profileUpdated || passwordProvided;
+    const token = shouldIssueNewToken
+      ? AuthUtils.generateToken(updatedUser)
+      : undefined;
+
+    return { user: updatedUser, token };
+  }
+
+  private static validateProfileImagePath(
+    value: string | null | undefined,
+  ): string | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+
+    const trimmedValue = value.trim();
+    if (trimmedValue.length === 0) {
+      return null;
+    }
+
+    if (trimmedValue.length > 2048) {
+      throw new Error("Profile image URL must be 2048 characters or fewer");
+    }
+
+    if (!trimmedValue.startsWith(AVATAR_UPLOAD_PREFIX)) {
+      throw new Error(
+        "Profile image URL must reference an uploaded avatar path",
+      );
+    }
+
+    const relativePath = trimmedValue.slice(AVATAR_UPLOAD_PREFIX.length);
+    const isInvalidRelativePath =
+      relativePath.length === 0 ||
+      relativePath.length > 255 ||
+      relativePath.includes("/") ||
+      relativePath.includes("\\") ||
+      relativePath.includes("..") ||
+      !AVATAR_FILENAME_REGEX.test(relativePath);
+
+    if (isInvalidRelativePath) {
+      throw new Error(
+        "Profile image URL must reference a valid uploaded avatar filename",
+      );
+    }
+
+    return `${AVATAR_UPLOAD_PREFIX}${relativePath}`;
+  }
+
+  static async getPublicProfileById(id: number): Promise<PublicUser | null> {
+    const user = await this.getUserById(id);
+    return user ? this.toPublicUser(user) : null;
+  }
+}

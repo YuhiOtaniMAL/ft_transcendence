@@ -1,0 +1,75 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: ft_transcendence_frontend
+    ports:
+      - "8443:443" # HTTPS必須
+      - "8080:80" # HTTPからHTTPSにリダイレクト用
+    volumes:
+      - ./ssl:/etc/nginx/ssl # SSL証明書をNginxの正しいパスにマウント
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      backend:
+        condition: service_started
+      ssl-cert:
+        condition: service_completed_successfully
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: ft_transcendence_backend
+    # ports:
+    #   - "3000:3000"  # Remove this in production deployment
+    volumes:
+      - ./database:/app/database # SQLite用
+      - ./uploads:/app/uploads # アップロードファイル用
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/app/database/transcendence.db
+    depends_on:
+      ssl-cert:
+        condition: service_completed_successfully
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # database:
+  #   image: alpine:latest
+  #   container_name: ft_transcendence_database
+  #   command: tail -f /dev/null # SQLiteなのでファイルベース、コンテナは永続化のみ
+  #   volumes:
+  #     - ./database:/data
+  #   environment:
+  #     - DB_PATH=/data/transcendence.db
+
+  # 開発用のHTTPS証明書生成
+  ssl-cert:
+    image: alpine:latest
+    container_name: ft_transcendence_ssl
+    command: >
+      sh -c "
+      apk add --no-cache openssl &&
+      mkdir -p /certs &&
+      if [ ! -f /certs/cert.pem ] || [ ! -f /certs/key.pem ]; then
+        echo 'Generating self-signed SSL certificate for development...' &&
+        openssl req -x509 -newkey rsa:4096 -keyout /certs/key.pem -out /certs/cert.pem -days 365 -nodes -subj '/C=US/ST=Development/L=Local/O=ft_transcendence/CN=localhost' &&
+        chmod 644 /certs/cert.pem &&
+        chmod 600 /certs/key.pem &&
+        echo 'SSL certificates generated successfully';
+      else
+        echo 'SSL certificates already exist';
+      fi
+      "
+    volumes:
+      - ./ssl:/certs
+
+networks:
+  app-network:
+    driver: bridge

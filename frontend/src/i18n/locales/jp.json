@@ -1,0 +1,498 @@
+{
+  "common": {
+    "language": "🌐",
+    "submit": "保存",
+    "cancel": "キャンセル"
+  },
+  "navigation": {
+    "home": "ホーム",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "auth": {
+    "loginTitle": "ログイン",
+    "registerTitle": "アカウント作成"
+  },
+  "home": {
+    "intro": "Pongの遊び方を選びましょう!",
+    "quickPlay": "🎮 クイックプレイ",
+    "quickPlayDescription": "2 または 4 人で対戦",
+    "tournament": "🏆 トーナメント",
+    "tournamentDescription": "4・8 人トーナメント",
+    "gameSettings": "⚙️ ゲーム設定",
+    "gameSettingsDescription": "ゲームをカスタマイズ"
+  },
+  "header": {
+    "title": "ft_transcendence",
+    "settings": "設定",
+    "logout": "ログアウト",
+    "login": "ログイン",
+    "language": "🌐",
+    "logoutSuccess": "ログアウトしました",
+    "logoutError": "ログアウトエラー: {{message}}",
+    "logoutErrorFallback": "ログアウト処理でエラーが発生しました",
+    "lang": {
+      "en": "English",
+      "cs": "Čeština",
+      "jp": "日本語"
+    }
+  },
+  "notifications": {
+    "profileUpdateSuccess": "プロフィールを更新しました！",
+    "twoFactorEnabled": "二要素認証が有効になりました。",
+    "twoFactorDisabled": "二要素認証が無効になりました。",
+    "twoFactorVerified": "二要素認証が完了しました。",
+    "twoFactorResendDestination": "{{destination}} に新しい確認コードを送信しました。",
+    "twoFactorResendGeneric": "新しい確認コードをメールに送信しました。",
+    "twoFactorResendFailed": "確認コードの再送に失敗しました。もう一度お試しください。",
+    "passwordMismatch": "新しいパスワードと確認用パスワードが一致しません。",
+    "passwordAllFieldsRequired": "パスワードを変更する場合は、現在のパスワード・新しいパスワード・確認用パスワードの3つすべてを入力してください。",
+    "emailChangeSeparate": "メールアドレスの変更は他の情報と別に行う必要があります。",
+    "sessionExpired": "セッションの有効期限が切れました。もう一度ログインしてください。",
+    "twoFactorCodePrompt": "メールに届いた6桁のコードを入力してください。"
+  },
+  "twoFactor": {
+    "dialog": {
+      "title": "二要素認証",
+      "codeLabel": "認証コード",
+      "codePlaceholder": "123456",
+      "submit": "コードを確認",
+      "resend": "確認コードを再送",
+      "cancel": "キャンセル",
+      "verifying": "確認しています...",
+      "resending": "再送しています..."
+    }
+  },
+  "settings": {
+    "pageTitle": "ユーザー設定",
+    "backButton": "ホームに戻る",
+    "buttons": {
+      "save": "変更を保存",
+      "saving": "保存中..."
+    },
+    "errors": {
+      "updateFailed": "設定の更新に失敗しました"
+    },
+    "profile": {
+      "title": "プロフィール",
+      "chooseImage": "画像を選択",
+      "imageRequirements": "PNG / JPG / WEBP (最大 5MB)",
+      "errors": {
+        "imageTooLarge": "画像サイズは 5MB 未満にしてください",
+        "invalidFormat": "PNG・JPG・WEBP 形式のみアップロードできます"
+      },
+      "usernameLabel": "ユーザー名",
+      "emailLabel": "メールアドレス",
+      "languageTitle": "言語の設定",
+      "languageDescription": "希望する言語を選択してください",
+      "changePasswordTitle": "パスワードを変更",
+      "changePasswordDescription": "パスワードを変更しない場合は各欄を空のままにしてください。変更する場合は確認のため現在のパスワードも入力してください。",
+      "currentPasswordLabel": "現在のパスワード",
+      "newPasswordLabel": "新しいパスワード",
+      "confirmPasswordLabel": "新しいパスワード（確認）"
+    },
+    "security": {
+      "title": "セキュリティ - 二要素認証 (2FA)",
+      "statusEnabled": "二要素認証は<strong>有効</strong>です。アカウントは追加のセキュリティで保護されています。",
+      "statusDisabled": "二要素認証は<strong>無効</strong>です。より高い安全性のために有効化してください。",
+      "enableButton": "2FA を有効化",
+      "disableButton": "2FA を無効化",
+      "errors": {
+        "enableFailed": "二要素認証を有効化できませんでした。",
+        "disableFailed": "二要素認証を無効化できませんでした。",
+        "invalidCode": "認証コードが正しくありません。もう一度お試しください。"
+      },
+      "dialog": {
+        "resend": "コードを再送",
+        "cancel": "キャンセル",
+        "emailDestination": "{{destination}} に認証コードを送信しました。続行するには入力してください。",
+        "emailFallback": "メールに届いた6桁のコードを入力してください。",
+        "loginMessage": "続行するにはメールで送信した認証コードを入力してください。",
+        "enableMessage": "二要素認証を有効にするにはメールで送信した認証コードを入力してください。",
+        "disableMessage": "二要素認証を無効にするにはメールで送信した認証コードを入力してください。",
+        "emailChangeMessage": "メールアドレスの変更を確定するにはメールで送信した認証コードを入力してください。"
+      }
+    },
+    "friends": {
+      "title": "友達",
+      "placeholder": "友達のユーザー名",
+      "addButton": "友達追加",
+      "adding": "追加中...",
+      "removeButton": "削除",
+      "removing": "削除中...",
+      "loading": "友達一覧を読み込み中...",
+      "empty": "まだ友達がいません。",
+      "online": "オンライン",
+      "offline": "オフライン",
+      "ariaRemove": "{{username}} を友達リストから削除",
+      "avatarAlt": "{{username}} のアバター",
+      "errors": {
+        "addFailed": "友達を追加できませんでした",
+        "removeFailed": "友達を削除できませんでした",
+        "loadFailed": "友達一覧を読み込めませんでした"
+      }
+    },
+    "history": {
+      "title": "対戦履歴と統計",
+      "loadingStats": "統計を読み込み中...",
+      "loadError": "対戦履歴を読み込めませんでした。時間をおいて再度お試しください。",
+      "noStats": "統計はまだありません",
+      "wins": "勝利",
+      "losses": "敗北",
+      "totalGames": "対戦数",
+      "winRate": "勝率",
+      "empty": "まだ対戦がありません。プレイするとここに履歴が表示されます。",
+      "recentMatches": "最近の対戦",
+      "loadMore": "さらに読み込む",
+      "loading": "読み込み中...",
+      "filters": {
+        "all": "すべて",
+        "quick": "クイック",
+        "tournament": "トーナメント"
+      },
+      "types": {
+        "quick": "クイックマッチ",
+        "tournament": "トーナメント"
+      },
+      "badges": {
+        "quick": "⚡ クイックマッチ",
+        "tournament": "🏆 トーナメント"
+      },
+      "labels": {
+        "score": "スコア",
+        "with": "チームメイト:",
+        "tournamentFallback": "トーナメント"
+      },
+      "results": {
+        "win": "勝ち",
+        "loss": "負け"
+      }
+    }
+  },
+  "quickPlay": {
+    "pageTitleSetup": "クイックプレイ設定",
+    "pageTitleRegistration": "プレイヤー登録",
+    "pageTitleGame": "クイックプレイ - ポン",
+    "homeButton": "ホーム",
+    "backToRegistration": "プレイヤー登録に戻る",
+    "startGame": "ゲーム開始",
+    "pauseGame": "一時停止",
+    "resetGame": "リセット",
+    "gameFinished": "ゲーム終了！",
+    "winner": "勝者",
+    "finalScore": "最終スコア",
+    "resetGameButton": "ゲームをリセット",
+    "selectPlayers": "プレイヤー人数",
+    "playerOption": "{{count}} 人",
+    "next": "次へ",
+    "backToSetup": "設定に戻る",
+    "startGameButton": "ゲーム開始",
+    "registrationTitle": "プレイヤー登録",
+    "registrationSubtitle": "クイックプレイ",
+    "registrationError": "プレイヤー登録画面の表示に失敗しました。",
+    "gameOverTitle": "ゲーム終了！",
+    "controls": {
+      "leftOuter": "左外",
+      "rightOuter": "右外",
+      "leftInner": "左内",
+      "rightInner": "右内"
+    }
+  },
+  "playerSelector": {
+    "label": "プレイヤー{{index}}",
+    "selectPlaceholder": "プレイヤーまたはAIを選択",
+    "aiOption": "AI",
+    "customOption": "ゲストプレイヤー",
+    "aiDifficulty": "AI難易度",
+    "difficulty": {
+      "easy": "やさしい",
+      "medium": "ふつう",
+      "hard": "難しい"
+    },
+    "customAlias": "ニックネーム",
+    "customPlaceholder": "カスタム名を入力",
+    "currentUser": "ログインユーザー",
+    "loginUserOption": "ログインユーザー",
+    "loginUserNameLabel": "ユーザー名",
+    "aiDisplayName": "AI{{index}}({{difficulty}})",
+    "leftSideLabel": "左サイド",
+    "rightSideLabel": "右サイド"
+  },
+  "playerRegistration": {
+    "missingPlayers": "{{count}} 人のプレイヤーが選択されていません",
+    "duplicateNames": "プレイヤー名が重複しています",
+    "requireHuman": "少なくとも1人は人間プレイヤーを選択してください"
+  },
+  "playerRegistrationWithCount": {
+    "title": "プレイヤー登録",
+    "subtitle": "プレイヤーを選択してトーナメントを準備しましょう",
+    "tournamentNameLabel": "トーナメント名",
+    "tournamentNamePlaceholder": "トーナメント名を入力",
+    "playerCountLabel": "プレイヤー人数",
+    "playerCountOption": "{{count}} 人",
+    "buttons": {
+      "back": "戻る",
+      "start": "開始"
+    }
+  },
+  "gameSettings": {
+    "title": "ゲーム設定",
+    "description": "ここでの変更はすべてのゲームモードに適用されます。",
+    "defaultLabel": "デフォルト",
+    "fieldColor": "背景色",
+    "ballColor": "ボールの色",
+    "paddleColor": "パドルの色",
+    "paddleLength": "パドルの長さ",
+    "paddleLengthOptions": {
+      "short": "短い",
+      "normal": "標準",
+      "long": "長い"
+    },
+    "ballSize": "ボールの大きさ",
+    "ballSizeOptions": {
+      "small": "小",
+      "normal": "標準",
+      "big": "大"
+    },
+    "ballSpeed": "ボールの速度",
+    "pointsToWin": "勝利に必要なポイント",
+    "pointsOption": "{{count}} ポイント"
+  },
+  "game": {
+    "scoreboard": {
+      "player1": "プレイヤー1",
+      "player2": "プレイヤー2"
+    }
+  },
+  "login": {
+    "title": "ログイン",
+    "emailLabel": "メールアドレス",
+    "emailPlaceholder": "メールアドレスを入力",
+    "passwordLabel": "パスワード",
+    "passwordPlaceholder": "パスワードを入力",
+    "submit": "ログイン",
+    "register": "アカウントをお持ちでないですか？ 登録",
+    "home": "ホームに戻る",
+    "errors": {
+      "required": "メールアドレスとパスワードは必須です",
+      "generic": "ログインに失敗しました",
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+      "twoFactorInvalid": "メールで受け取った6桁のコードを入力してください",
+      "twoFactorUnexpected": "コード検証中に予期しない応答がありました。",
+      "twoFactorGeneric": "検証に失敗しました",
+      "twoFactorMissing": "二要素認証の情報がありません"
+    },
+    "status": {
+      "loggingIn": "ログイン処理中...",
+      "verifying": "検証中..."
+    },
+    "twoFactor": {
+      "title": "二要素認証",
+      "message": "メールで送信された認証コードを入力してください。",
+      "codeLabel": "認証コード",
+      "codePlaceholder": "123456",
+      "submit": "コードを確認",
+      "cancel": "ログイン画面に戻る",
+      "resend": "確認コードを再送"
+    },
+    "alerts": {
+      "welcome": "お帰りなさい、{{username}} さん！",
+      "guest": "ユーザー"
+    }
+  },
+  "register": {
+    "page": {
+      "heading": "アカウント作成",
+      "home": "ホーム"
+    },
+    "form": {
+      "title": "アカウントを作成",
+      "usernameLabel": "ユーザー名",
+      "usernamePlaceholder": "ユーザー名を選択してください",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "安全なパスワードを入力してください",
+      "passwordHelp": "6文字以上で入力してください。",
+      "confirmLabel": "パスワードの確認",
+      "confirmPlaceholder": "パスワードを再入力してください",
+      "submit": "アカウントを作成",
+      "login": "すでにアカウントをお持ちですか？ ログイン",
+      "home": "ホームに戻る",
+      "status": {
+        "submitting": "アカウントを作成しています..."
+      },
+      "errors": {
+        "required": "すべての項目を入力してください。",
+        "usernameLength": "ユーザー名は3〜20文字で入力してください。",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "emailExists": "このメールアドレスは既に使用されています。",
+        "passwordLength": "パスワードは6文字以上で入力してください。",
+        "passwordMismatch": "パスワードが一致しません。",
+        "usernameExists": "このユーザー名は既に使用されています。",
+        "generic": "登録に失敗しました。"
+      },
+      "passwordToggle": {
+        "show": "パスワードを表示",
+        "hide": "パスワードを非表示"
+      }
+    }
+  },
+  "tournament": {
+    "titles": {
+      "setup": "トーナメント設定",
+      "registration": "プレイヤー登録",
+      "bracket": "トーナメント表",
+      "match": "トーナメント試合",
+      "results": "トーナメント結果",
+      "mode": "トーナメントモード"
+    },
+    "navigation": {
+      "registration": {
+        "pageTitle": "プレイヤー登録",
+        "backButtonLabel": "ホーム"
+      },
+      "bracket": {
+        "pageTitle": "トーナメント表",
+        "backButtonLabel": "戻る"
+      },
+      "match": {
+        "pageTitle": "トーナメント試合",
+        "backButtonLabel": "戻る"
+      },
+      "results": {
+        "pageTitle": "トーナメント結果",
+        "backButtonLabel": "戻る"
+      },
+      "fallback": {
+        "pageTitle": "トーナメントモード",
+        "backButtonLabel": "戻る"
+      }
+    },
+    "buttons": {
+      "home": "ホーム",
+      "back": "戻る",
+      "continue": "続行",
+      "create": "トーナメント作成",
+      "backToSetup": "設定に戻る",
+      "startTournament": "試合開始",
+      "playMatch": "対戦",
+      "playing": "プレイ中...",
+      "newTournament": "新しいトーナメント",
+      "startMatch": "試合開始",
+      "pause": "一時停止",
+      "reset": "リセット",
+      "startNewTournament": "新しい試合を開始"
+    },
+    "setup": {
+      "nameLabel": "トーナメント名",
+      "namePlaceholder": "トーナメント名を入力",
+      "nameDefault": "Pongトーナメント",
+      "playerCountLabel": "参加人数",
+      "playerOption": "{{count}} 人",
+      "missingName": "トーナメント名を入力してください"
+    },
+    "registration": {
+      "title": "プレイヤー登録",
+      "subtitle": "トーナメント",
+      "error": "プレイヤー登録画面の表示に失敗しました。"
+    },
+    "errors": {
+      "playerSelection": "プレイヤーの選択を取得できませんでした。",
+      "startTournament": "トーナメント開始時にエラーが発生しました: {{message}}",
+      "criticalMatch": "試合の保存中に重大なエラーが発生しました。"
+    },
+    "bracket": {
+      "heading": "現在のトーナメント表",
+      "remaining": "{{roundName}}（残り {{count}} 人）",
+      "unknownPlayer": "不明",
+      "vs": "対"
+    },
+    "match": {
+      "heading": "{{player1}} 対 {{player2}}",
+      "details": "{{identifier}} - 先に{{points}}ポイント取った方が勝利",
+      "identifier": "{{roundName}} - {{matchLabel}}",
+      "controlsLeft": "<strong class=\"text-white\">{{player}}（左外）:</strong> W/S",
+      "controlsRight": "<strong class=\"text-white\">{{player}}（右外）:</strong> ↑/↓",
+      "playerDefault": "プレイヤー{{index}}",
+      "matchNumber": "第{{number}}試合"
+    },
+    "results": {
+      "title": "🏆 トーナメント終了！",
+      "winner": "勝者: {{name}}",
+      "record": "勝利: {{wins}} | 敗北: {{losses}}"
+    },
+    "rounds": {
+      "final": "決勝",
+      "semiFinal": "準決勝",
+      "quarterFinal": "準々決勝",
+      "round": "第{{number}}ラウンド"
+    },
+    "modal": {
+      "playerWins": "{{player}}の勝利！",
+      "matchResult": "{{player}} が {{score1}} - {{score2}} で勝利しました！"
+    }
+  },
+  "errors": {
+    "AUTH_MISSING_FIELDS": "ユーザー名・メールアドレス・パスワードは必須です",
+    "AUTH_PASSWORD_TOO_SHORT": "パスワードは6文字以上で入力してください",
+    "AUTH_PASSWORD_TOO_LONG": "パスワードは72文字以内で入力してください",
+    "AUTH_PASSWORD_INVALID_CHARACTERS": "パスワードは半角英数字と記号のみ使用できます",
+    "AUTH_INVALID_EMAIL": "メールアドレスの形式が正しくありません",
+    "AUTH_EMAIL_TOO_LONG": "メールアドレスは100文字以内で入力してください",
+    "AUTH_USERNAME_LENGTH": "ユーザー名は3〜20文字で入力してください",
+    "AUTH_USER_CONFLICT": "このユーザーは既に存在します",
+    "AUTH_REGISTRATION_FAILED": "登録に失敗しました",
+    "AUTH_LOGIN_MISSING_FIELDS": "メールアドレスとパスワードは必須です",
+    "AUTH_INVALID_CREDENTIALS": "メールアドレスまたはパスワードが正しくありません",
+    "AUTH_LOGIN_FAILED": "ログインに失敗しました",
+    "AUTH_UNAUTHORIZED": "ログインが必要です",
+    "AUTH_USER_NOT_FOUND": "ユーザーが見つかりません",
+    "AUTH_2FA_ALREADY_ENABLED": "二要素認証は既に有効です",
+    "AUTH_2FA_ENABLE_FAILED": "二要素認証の有効化に失敗しました",
+    "AUTH_2FA_TOKEN_REQUIRED": "認証トークンが必要です",
+    "AUTH_2FA_RESEND_FAILED": "認証コードの再送に失敗しました",
+    "AUTH_2FA_NOT_ENABLED": "二要素認証が有効になっていません",
+    "AUTH_2FA_DISABLE_FAILED": "二要素認証の無効化に失敗しました",
+    "AUTH_2FA_TOKEN_AND_CODE_REQUIRED": "トークンと確認コードは必須です",
+    "AUTH_2FA_VERIFY_FAILED": "二要素認証の確認に失敗しました",
+    "AUTH_PROFILE_LOAD_FAILED": "ユーザープロフィールの取得に失敗しました",
+    "AUTH_LOGOUT_FAILED": "ログアウトに失敗しました",
+    "AUTH_TOKEN_REQUIRED": "アクセス・トークンが必要です",
+    "AUTH_TOKEN_INVALIDATED": "このトークンは無効化されています",
+    "AUTH_INVALID_TOKEN": "トークンが無効か有効期限切れです",
+    "USER_EMAIL_CHANGE_REQUIRES_SEPARATE": "メールアドレスの変更は他の情報と別に行う必要があります",
+    "USER_UPDATE_FAILED": "ユーザー設定の更新に失敗しました",
+    "USER_UPDATE_INVALID": "設定内容が正しくありません",
+    "AVATAR_REQUIRED": "アバター画像のファイルが必要です",
+    "AVATAR_INVALID_FIELD": "アバターのフィールド名が正しくありません",
+    "AVATAR_STREAM_ERROR": "アバターの読み込み中にエラーが発生しました",
+    "AVATAR_EMPTY_FILE": "アバター画像が空です",
+    "AVATAR_UNKNOWN_TYPE": "アバターのファイル形式を判別できません",
+    "AVATAR_UNSUPPORTED_TYPE": "PNG・JPEG・WebP 形式の画像のみ使用できます",
+    "AVATAR_PROCESSING_FAILED": "アバターの処理に失敗しました",
+    "AVATAR_SAVE_FAILED": "アバターの保存に失敗しました",
+    "AVATAR_TOO_LARGE": "アバターのサイズが2MBを超えています",
+    "STATUS_413": "リクエストのデータが大きすぎるため、サーバーで処理できません",
+    "AVATAR_UPLOAD_FAILED": "アバターのアップロードに失敗しました",
+    "AVATAR_DIMENSIONS_TOO_LARGE": "画像の縦横サイズが大きすぎます（最大4096x4096ピクセル）",
+    "FRIENDS_LIST_FAILED": "フレンド一覧の取得に失敗しました",
+    "FRIENDS_INVALID_INPUT": "フレンドのユーザー名を入力してください",
+    "FRIENDS_CONFLICT": "このユーザーは追加できません",
+    "FRIENDS_ADD_FAILED": "フレンドの追加に失敗しました",
+    "FRIENDS_INVALID_ID": "ユーザーIDが無効です",
+    "FRIENDS_REMOVE_FAILED": "フレンドの削除に失敗しました",
+    "HISTORY_FORBIDDEN_FOR_OTHER_USER": "他のユーザーの履歴は作成できません",
+    "HISTORY_INVALID_MATCH_TYPE": "対戦タイプが無効です",
+    "HISTORY_TOURNAMENT_NAME_REQUIRED": "トーナメント戦には大会名が必要です",
+    "HISTORY_TOURNAMENT_NAME_TOO_LONG": "大会名は30文字以内で入力してください",
+    "HISTORY_CREATE_FAILED": "対戦履歴の作成に失敗しました",
+    "HISTORY_INVALID_TOURNAMENT_ID": "トーナメントIDが無効です",
+    "HISTORY_INVALID_LIMIT": "取得件数が不正です（1〜10の範囲）",
+    "HISTORY_INVALID_OFFSET": "オフセット値が不正です",
+    "HISTORY_FETCH_FAILED": "対戦履歴の取得に失敗しました",
+    "HISTORY_STATS_FAILED": "統計情報の取得に失敗しました",
+    "FAILED_TO_FETCH": "ネットワークに接続できませんでした。接続を確認してもう一度お試しください。",
+    "UNKNOWN_ERROR": "エラーが発生しました。もう一度お試しください。"
+  }
+}
